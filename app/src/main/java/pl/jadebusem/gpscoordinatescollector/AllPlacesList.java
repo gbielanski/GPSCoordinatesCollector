@@ -8,17 +8,37 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.firebase.client.Firebase;
+import com.firebase.ui.FirebaseListAdapter;
+
+import java.io.FileReader;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class AllPlacesList extends AppCompatActivity {
+
+	@Bind(R.id.toolbar)
+	protected Toolbar toolbar;
+
+	@Bind(R.id.all_places_list)
+	protected ListView allPlacesListView;
+
+	@Bind(R.id.fab)
+	protected FloatingActionButton fab;
+	private Firebase mRootref;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_all_places_list);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		ButterKnife.bind(this);
 		setSupportActionBar(toolbar);
 
-		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -26,6 +46,24 @@ public class AllPlacesList extends AppCompatActivity {
 						.setAction("Action", null).show();
 			}
 		});
+
+		Firebase.setAndroidContext(this);
+		mRootref = new Firebase("https://gpscollector.firebaseio.com/places");
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FirebaseListAdapter<String> adapter = new FirebaseListAdapter<String>(this, String.class,
+				android.R.layout.simple_list_item_1, mRootref) {
+			@Override
+			protected void populateView(View view, String s, int i) {
+				TextView textView = (TextView)view.findViewById(android.R.id.text1);
+				textView.setText(s);
+			}
+		};
+
+		allPlacesListView.setAdapter(adapter);
 	}
 
 	@Override
