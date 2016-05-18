@@ -1,5 +1,6 @@
 package pl.jadebusem.gpscoordinatescollector;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -79,18 +80,22 @@ public class AllPlacesList extends AppCompatActivity {
 				if (mapIntent.resolveActivity(getPackageManager()) != null) {
 					startActivity(mapIntent);
 				}
+				Log.v("MAPAPA", "setOnItemLongClickListener");
 				return true;
 			}
 		});
 
-		allPlacesListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		allPlacesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				String location = adapter.getItem(position);
-			}
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String place_name = adapter.getItem(position);
+				Bundle placeToShow = new Bundle();
+				placeToShow.putString("PLACE_NAME", place_name);
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
+				Fragment fragment = new PlaceDetailsFragment();
+				fragment.setArguments(placeToShow);
+
+				getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
 
 			}
 		});
