@@ -1,5 +1,6 @@
 package pl.jadebusem.gpscoordinatescollector;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,11 +21,11 @@ public class PlaceDetailsFragment extends Fragment {
 		String placeName = getArguments().getString("PLACE_NAME");
 		TextView textView = (TextView)view.findViewById(R.id.itemName);
 		textView.setText(placeName);
-		Log.v("MAPAPA", "onCreateView");
 		Button closeButton = (Button)view.findViewById(R.id.close_button);
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				getActivity().getFragmentManager().beginTransaction().hide(PlaceDetailsFragment.this).commit();
 			}
 		});
 		return view;
