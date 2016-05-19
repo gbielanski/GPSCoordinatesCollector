@@ -95,7 +95,7 @@ public class AllPlacesList extends AppCompatActivity {
 				Fragment fragment = new PlaceDetailsFragment();
 				fragment.setArguments(placeToShow);
 
-				getFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+				getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
 			}
 		});
