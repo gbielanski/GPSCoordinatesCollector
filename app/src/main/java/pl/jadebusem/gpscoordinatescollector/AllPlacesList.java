@@ -33,8 +33,6 @@ public class AllPlacesList extends AppCompatActivity {
 	@Bind(R.id.all_places_list)
 	protected ListView allPlacesListView;
 
-	@Bind(R.id.fab)
-	protected FloatingActionButton fab;
 	private Firebase mRootref;
 	private FirebaseListAdapter<Place> adapter;
 
@@ -45,14 +43,6 @@ public class AllPlacesList extends AppCompatActivity {
 		setContentView(R.layout.activity_all_places_list);
 		ButterKnife.bind(this);
 		setSupportActionBar(toolbar);
-
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAction("Action", null).show();
-			}
-		});
 
 		Firebase.setAndroidContext(this);
 		mRootref = new Firebase(DB_URL);
