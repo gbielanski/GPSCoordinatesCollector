@@ -26,6 +26,15 @@ public class PlaceDetailsFragment extends Fragment {
 				getActivity().getFragmentManager().beginTransaction().hide(PlaceDetailsFragment.this).commit();
 			}
 		});
+
+		Button setButton = (Button)view.findViewById(R.id.set_button);
+		setButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				getActivity().getFragmentManager().beginTransaction().hide(PlaceDetailsFragment.this).commit();
+			}
+		});
+
 		return view;
 	}
 }
