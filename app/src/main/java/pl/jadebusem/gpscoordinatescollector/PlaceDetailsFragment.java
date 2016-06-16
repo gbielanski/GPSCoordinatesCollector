@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ public class PlaceDetailsFragment extends DialogFragment {
 
 	public static final String USTAWIANIE_POZYCJI = "Ustawianie pozycji";
 	private Button setButton;
+	private LocationManager locationManager;
+	private LocationListener locationListener;
 
 	@Nullable
 	@Override
@@ -46,11 +49,14 @@ public class PlaceDetailsFragment extends DialogFragment {
 			}
 		});
 
-		LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-		LocationListener locationListener = new LocationListener() {
+		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
-				Toast.makeText(getActivity(), "Location: " + location.toString(), Toast.LENGTH_LONG).show();
+				if(getActivity() != null)
+					Toast.makeText(getActivity(), "Location: " + location.toString(), Toast.LENGTH_LONG).show();
+				else
+					Log.e("ACTIVITY", "WAS NuLL");
 			}
 
 			@Override
@@ -69,21 +75,33 @@ public class PlaceDetailsFragment extends DialogFragment {
 			}
 		};
 
+		return view;
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
 		if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
 				ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
-			//    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
 			// to handle the case where the user grants the permission. See the documentation
 			// for Activity#requestPermissions for more details.
-			return view;
+			return ;
 		}
 
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-		return view;
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+				ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			// to handle the case where the user grants the permission. See the documentation
+			// for Activity#requestPermissions for more details.
+			return ;
+		}
+
+		locationManager.removeUpdates(locationListener);
 	}
 }
