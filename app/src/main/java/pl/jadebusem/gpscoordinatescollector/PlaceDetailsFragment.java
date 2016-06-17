@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
@@ -23,6 +25,7 @@ import com.firebase.client.Firebase;
 public class PlaceDetailsFragment extends DialogFragment {
 
 	public static final String USTAWIANIE_POZYCJI = "Ustawianie pozycji";
+	private static final int MY_GPS_REQUEST = 1;
 	private Button setButton;
 	private Button resetButton;
 	private LocationManager locationManager;
@@ -42,7 +45,6 @@ public class PlaceDetailsFragment extends DialogFragment {
 		place = getArguments().getParcelable("PLACE");
 
 		position = getArguments().getInt("POSITION");
-		Log.v("POSITION", "" + position);
 		TextView textView = (TextView) view.findViewById(R.id.itemName);
 		textView.setText(place.getName());
 	    mRootref = new Firebase(AllPlacesList.DB_URL);
@@ -115,6 +117,9 @@ public class PlaceDetailsFragment extends DialogFragment {
 		super.onResume();
 		if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
 				ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(getActivity(),
+					new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_GPS_REQUEST);
+			Toast.makeText(getActivity(), "NO GPS PERMISSION", Toast.LENGTH_LONG).show();
 			return ;
 		}
 
