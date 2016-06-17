@@ -19,8 +19,6 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class PlaceDetailsFragment extends DialogFragment {
 

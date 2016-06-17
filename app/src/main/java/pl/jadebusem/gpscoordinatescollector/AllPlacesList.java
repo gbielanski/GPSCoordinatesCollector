@@ -63,8 +63,12 @@ public class AllPlacesList extends AppCompatActivity {
 		allPlacesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				String location = adapter.getItem(position).getName();
-				Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + location);
+				Uri gmmIntentUri;
+				if (isLocationSet(adapter.getItem(position))) {
+					gmmIntentUri = getExactLocationUri(adapter.getItem(position));
+				} else
+					gmmIntentUri = getApproximateLocationUri(adapter.getItem(position));
+
 				Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 				mapIntent.setPackage("com.google.android.apps.maps");
 				if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -91,8 +95,17 @@ public class AllPlacesList extends AppCompatActivity {
 		});
 	}
 
+	private Uri getExactLocationUri(Place place) {
+		return Uri.parse("geo:"+ place.getLat() + "," + place.getLng() + "?q=" + place.getLat() + "," + place.getLng()+"(" + place.getName() + ")");
+	}
 
+	private Uri getApproximateLocationUri(Place place) {
+		return Uri.parse("geo:0,0?q=" + place.getName());
+	}
 
+	private boolean isLocationSet(Place place) {
+		return place.getLat()!= 0 || place.getLng()!=0;
+	}
 
 
 	@Override
