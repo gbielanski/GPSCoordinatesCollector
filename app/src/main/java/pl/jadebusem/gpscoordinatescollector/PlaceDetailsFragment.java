@@ -24,6 +24,7 @@ public class PlaceDetailsFragment extends DialogFragment {
 
 	public static final String USTAWIANIE_POZYCJI = "Ustawianie pozycji";
 	private Button setButton;
+	private Button resetButton;
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 	TextView lon;
@@ -61,6 +62,18 @@ public class PlaceDetailsFragment extends DialogFragment {
 				Firebase mPlaceRef = mRootref.child(Integer.valueOf(position).toString());
 				place.setLng(Float.valueOf(lon.getText().toString()));
 				place.setLat(Float.valueOf(lat.getText().toString()));
+				mPlaceRef.setValue(place);
+				dismiss();
+			}
+		});
+
+		resetButton = (Button) view.findViewById(R.id.reset_button);
+		resetButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Firebase mPlaceRef = mRootref.child(Integer.valueOf(position).toString());
+				place.setLng(0);
+				place.setLat(0);
 				mPlaceRef.setValue(place);
 				dismiss();
 			}

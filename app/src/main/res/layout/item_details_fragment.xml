@@ -64,24 +64,24 @@
                     android:paddingTop="5dp">
 
         <Button
-            android:id="@+id/reset_button"
+            android:id="@+id/close_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/reset"/>
+            android:text="@string/close"/>
 
         <Button
-            android:id="@+id/close_button"
+            android:id="@+id/reset_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/close"/>
+            android:text="@string/reset"/>
 
         <Button
             android:id="@+id/set_button"
