@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+
+import java.math.BigDecimal;
 
 
 public class PlaceDetailsFragment extends DialogFragment {
@@ -62,8 +63,8 @@ public class PlaceDetailsFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				Firebase mPlaceRef = mRootref.child(Integer.valueOf(position).toString());
-				place.setLng(Float.valueOf(lon.getText().toString()));
-				place.setLat(Float.valueOf(lat.getText().toString()));
+				place.setLng(Double.valueOf(lon.getText().toString()));
+				place.setLat(Double.valueOf(lat.getText().toString()));
 				mPlaceRef.setValue(place);
 				dismiss();
 			}
@@ -89,8 +90,9 @@ public class PlaceDetailsFragment extends DialogFragment {
 		locationListener = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
-				lon.setText(String.valueOf(location.getLongitude()));
-				lat.setText(String.valueOf(location.getLatitude()));
+
+				lon.setText(getFormatedLocation(location.getLongitude()));
+				lat.setText(getFormatedLocation(location.getLatitude()));
 			}
 
 			@Override
@@ -110,6 +112,10 @@ public class PlaceDetailsFragment extends DialogFragment {
 		};
 
 		return view;
+	}
+
+	private String getFormatedLocation(double location) {
+		return new BigDecimal(location).setScale(6, BigDecimal.ROUND_HALF_UP).toString();
 	}
 
 	@Override

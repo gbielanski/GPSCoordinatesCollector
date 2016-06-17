@@ -8,15 +8,15 @@ import android.os.Parcelable;
  */
 public class Place implements Parcelable {
 	private String name;
-	private float lat;
-	private float lng;
+	private double lat;
+	private double lng;
 
 	public Place(){};
 
 	protected Place(Parcel in) {
 		name = in.readString();
-		lat = in.readFloat();
-		lng = in.readFloat();
+		lat = in.readDouble();
+		lng = in.readDouble();
 	}
 
 	public static final Creator<Place> CREATOR = new Creator<Place>() {
@@ -39,19 +39,19 @@ public class Place implements Parcelable {
 		this.name = name;
 	}
 
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 
-	public float getLng() {
+	public double getLng() {
 		return lng;
 	}
 
-	public void setLng(float lng) {
+	public void setLng(double lng) {
 		this.lng = lng;
 	}
 
@@ -63,7 +63,7 @@ public class Place implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
-		dest.writeFloat(lat);
-		dest.writeFloat(lng);
+		dest.writeDouble(lat);
+		dest.writeDouble(lng);
 	}
 }
