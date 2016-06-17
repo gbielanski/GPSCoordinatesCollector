@@ -10,11 +10,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.firebase.client.Firebase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlaceDetailsFragment extends DialogFragment {
 
@@ -24,17 +30,23 @@ public class PlaceDetailsFragment extends DialogFragment {
 	private LocationListener locationListener;
 	TextView lon;
 	TextView lat;
+	private Firebase mRootref;
+	private Place place;
+	private int position;
+
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.item_details_fragment, container, false);
 		getDialog().setTitle(USTAWIANIE_POZYCJI);
-		Place place = getArguments().getParcelable("PLACE");
+		place = getArguments().getParcelable("PLACE");
+
+		position = getArguments().getInt("POSITION");
+		Log.v("POSITION", "" + position);
 		TextView textView = (TextView) view.findViewById(R.id.itemName);
 		textView.setText(place.getName());
-
-
+	    mRootref = new Firebase(AllPlacesList.DB_URL);
 
 		Button closeButton = (Button) view.findViewById(R.id.close_button);
 		closeButton.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +60,10 @@ public class PlaceDetailsFragment extends DialogFragment {
 		setButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Firebase mPlaceRef = mRootref.child(Integer.valueOf(position).toString());
+				place.setLng(Float.valueOf(lon.getText().toString()));
+				place.setLat(Float.valueOf(lat.getText().toString()));
+				mPlaceRef.setValue(place);
 				dismiss();
 			}
 		});

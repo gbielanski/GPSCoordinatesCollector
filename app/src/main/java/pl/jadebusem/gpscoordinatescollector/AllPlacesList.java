@@ -80,6 +80,7 @@ public class AllPlacesList extends AppCompatActivity {
 				Place place = adapter.getItem(position);
 				Bundle placeToShow = new Bundle();
 				placeToShow.putParcelable("PLACE", place);
+				placeToShow.putInt("POSITION", position);
 
 				DialogFragment fragment = new PlaceDetailsFragment();
 				fragment.setArguments(placeToShow);
