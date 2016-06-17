@@ -77,9 +77,9 @@ public class AllPlacesList extends AppCompatActivity {
 		allPlacesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String place_name = adapter.getItem(position).getName();
+				Place place = adapter.getItem(position);
 				Bundle placeToShow = new Bundle();
-				placeToShow.putString("PLACE_NAME", place_name);
+				placeToShow.putParcelable("PLACE", place);
 
 				DialogFragment fragment = new PlaceDetailsFragment();
 				fragment.setArguments(placeToShow);

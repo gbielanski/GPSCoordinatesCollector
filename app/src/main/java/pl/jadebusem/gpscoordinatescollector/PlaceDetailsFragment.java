@@ -10,13 +10,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlaceDetailsFragment extends DialogFragment {
 
@@ -24,15 +22,20 @@ public class PlaceDetailsFragment extends DialogFragment {
 	private Button setButton;
 	private LocationManager locationManager;
 	private LocationListener locationListener;
+	TextView lon;
+	TextView lat;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.item_details_fragment, container, false);
 		getDialog().setTitle(USTAWIANIE_POZYCJI);
-		String placeName = getArguments().getString("PLACE_NAME");
+		Place place = getArguments().getParcelable("PLACE");
 		TextView textView = (TextView) view.findViewById(R.id.itemName);
-		textView.setText(placeName);
+		textView.setText(place.getName());
+
+
+
 		Button closeButton = (Button) view.findViewById(R.id.close_button);
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -49,14 +52,16 @@ public class PlaceDetailsFragment extends DialogFragment {
 			}
 		});
 
+		lon = (TextView)view.findViewById(R.id.lon);
+		lat = (TextView)view.findViewById(R.id.lat);
+		lon.setText(String.valueOf(place.getLng()));
+		lat.setText(String.valueOf(place.getLat()));
 		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
-				if(getActivity() != null)
-					Toast.makeText(getActivity(), "Location: " + location.toString(), Toast.LENGTH_LONG).show();
-				else
-					Log.e("ACTIVITY", "WAS NuLL");
+				lon.setText(String.valueOf(location.getLongitude()));
+				lat.setText(String.valueOf(location.getLatitude()));
 			}
 
 			@Override
@@ -83,8 +88,6 @@ public class PlaceDetailsFragment extends DialogFragment {
 		super.onResume();
 		if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
 				ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// to handle the case where the user grants the permission. See the documentation
-			// for Activity#requestPermissions for more details.
 			return ;
 		}
 
@@ -97,8 +100,6 @@ public class PlaceDetailsFragment extends DialogFragment {
 		super.onPause();
 		if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
 				ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// to handle the case where the user grants the permission. See the documentation
-			// for Activity#requestPermissions for more details.
 			return ;
 		}
 
